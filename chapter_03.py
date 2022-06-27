@@ -1,8 +1,11 @@
 from fastapi import FastAPI
 
+# Create the server
 app = FastAPI(debug=True)
 
-@app.get('/')
+# When we go to the http://127.0.0.1:8000/home
+# the return will be {'Hello':'world'}
+@app.get('/home')
 async def hello_world():
     return {'Hello':'world'}
 
@@ -10,34 +13,11 @@ async def hello_world():
 # ----- Path parameters ------------
 # ----------------------------------
 
-@app.get("/users/{id}")
-async def get_user(id: int):
-   return {"id": id}
-# Only permits int. This happen due to we specify the type of data
-# type hint
-
-app = FastAPI()
-@app.get("/users/{type}/{id}/")
-async def get_user(type: str, id: int):
-    return {"type": type, "id": id}
-
-# ---------------------------------------
-# ------Limiting allowed values----------
-# ---------------------------------------
-
-# don't work
-
-#from enum import Enum
-
-#class UserType(str, Enum):
-#    STANDARD = "standard"
-#    ADMIN = "admin"
-
-#@app.get("/users/us")
-#async def get_user(user_lic: UserType):
-#    return {"user_lic": user_lic}
-
-
+@app.get("/users/{idx}")
+async def get_user(idx: int):
+   return {"idx": idx}
+# Only permits int. This happen due to we specify the type of data. Type hint
+# We can pas more parameters adding `/`
 
 # --------------------------------------------
 # --------- Path parameters ----------------
@@ -45,9 +25,13 @@ async def get_user(type: str, id: int):
 
 from fastapi import Path
 app = FastAPI()
+bought = ['1055-ADQW', '6270-QPLK', '5065-ALOP']
 @app.get("/users/licence/{licence}")
 async def get_user(licence: str = Path(regex=r'(\d{4}-[A-Z]{4})$')):
-    return {"licence": licence}
+    if licence in bought:
+        return 'Your licence is actived'
+    else:
+        return 'Your licence is not actived'
 
 # Other options for Path apart of regex
 # gt: Greater than
@@ -64,20 +48,29 @@ async def get_user(page: int = 1, size: int = 10):
 
 # You simply have to declare them as arguments of your path operation function. If they
 # don't appear in the path pattern, as they do for path parameters, FastAPI automatically
-# considers them to be query parameters
+# considers them to be query parameters.
+# If don't pass, by default, the return will be {"page": 1, "size": 10}
 
+# http://127.0.0.1:8000/users/news?page=1&size=10
+# `?page=90&size=60` -> this is query
 
 from fastapi import Query
 
-
 # we force the page to be greater than 0 and the size to be less than or equal to 100
 
-@app.get("/users/news/gol")
-async def get_user(page: int = Query(1, gt=0), size: int = Query(10, le=100)):
-    return {"page": page, "size": size}
+@app.get("/users/news")
+async def get_user(
+    type_file: str = Query(regex=r'csv|xlsx|txt'), 
+    year: str = Query(regex=r'20(?:([01]\d|2[012]))')):
+    """This function only allow 3 types of files and the years 2000-2022
+    e.g.`?type_file=txt&year=2020`
+    """
+
+    return {"type_file": type_file, "year": year}
 
 # ----------------------------------------
-# ----------- The request body -----------
+# ----------- The request body  ----------
+# ---------------POST --------------------
 # ----------------------------------------
 
 from fastapi import Body
@@ -85,11 +78,13 @@ from fastapi import Body
 # The body is the part of the HTTP request that contains raw data, representing documents,
 # files, or form submissions. In a REST API, it's usually encoded in JSON and used to create
 # structured objects in a database
+# So, in `http://127.0.0.1:8000/users` we can post {"name": "John", age: 39}
 
 @app.post("/users")
 async def create_user(name: str = Body(), age: int = Body()):
     print(name, age)
     return {"name": name, "age": age}
+
 
 # ---------------------------------------------
 # --- pydantic models for data validation------
@@ -97,13 +92,17 @@ async def create_user(name: str = Body(), age: int = Body()):
 from fastapi import FastAPI
 from pydantic import BaseModel
 
+# define the schema of the data
+# name: str, age int
+# we can add Form(...), like `name:str = Form(..)` in the base model
+
 class User(BaseModel):
-    name: str
-    age: int
+    name: str 
+    age: int 
 
 app = FastAPI()
 
-@app.post("/users/POL")
+@app.post("/users")
 async def create_user(user: User):
     print(user.name, user.age, user.dict())
     return user
@@ -122,34 +121,25 @@ class Company(BaseModel):
 
 from fastapi import Form, UploadFile, File
 
-@app.post("/users/LUX")
+# post data from `Form`
+@app.post("/users")
 async def create_user(name: str = Form(), age: int =Form()):
     return {"name": name, "age": age}
 
 # File uploads----
-
 app = FastAPI()
 @app.post("/files")
 async def upload_file(file: UploadFile = File()):
     print(file.content_type)
     return {"file_size": file.filename, 'content':file.content_type}
 
-from typing import List
-app = FastAPI()
-@app.post("/files")
-async def upload_file(file: UploadFile = File()):
-    return {"file_size": file.filename, 'content': file.content_type}
 
 # -----------------------------------------------------------
 # -----------------Headers and cookies -----------------------
 # -----------------------------------------------------------
 from fastapi import Header
 
-#@app.get("/header")
-#async def get_header(hello: str = Header(...)):
-#    print(hello)
-#    return {"hello": hello}
-
+# to get the header of a web page, that include the Header
 @app.get("/user_agent")
 async def get_header(user_agent: str = Header(...)):
     print(user_agent)
@@ -160,10 +150,12 @@ async def get_header(user_agent: str = Header(...)):
 # -----------------------------------------
 from fastapi import FastAPI, Request
 
+
 app = FastAPI()
 @app.get("/requests")
 async def get_request_object(request: Request):
-    return {"path": request.url.path}
+    # This request only get some information of the server
+    return {"path": request.url.path, 'host':request.client.host}
 
 # -----------------------------------------------------------------
 # -----------------Customizing the response -----------------------
@@ -174,6 +166,8 @@ from pydantic import BaseModel
 
 class Post(BaseModel):
     title: str
+    page:int
+    year:int
 
 app = FastAPI()
 
@@ -184,12 +178,12 @@ async def create_post(post: Post):
 
 # DELETE
 # Dummy database
-#posts = {50: Post(title="Hello", nb_views=100)}
+posts = {50: Post(title="Hello", nb_views=100)}
 
-#@app.delete("/posts/{id}", status_code=status.HTTP_204_NO_CONTENT)
-#async def delete_post(id: int):
-#    posts.pop(id, None)
-#    return None
+@app.delete("/posts/{id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_post(id: int):
+   posts.pop(id, None)
+   return None
 
 # ----------------------------------------------
 # ----------- The response model ---------------
@@ -204,7 +198,7 @@ class Post(BaseModel):
 
 app = FastAPI()
 
-# Dummy database
+# Given the dummy database
 posts = {1: Post(title="Hello", nb_views=100)}
 
 @app.get("/posts/{id}")
@@ -215,7 +209,7 @@ async def get_post(id: int):
 class PublicPost(BaseModel):
     title: str
 
-@app.get("/postspublic/{id}", response_model = PublicPost)
+@app.get("/posts/{id}", response_model = PublicPost)
 async def get_post(id: int):
     return posts[id]
 
@@ -228,7 +222,6 @@ app = FastAPI()
 async def custom_header(response: Response):
     response.headers["Custom-Header"] = "Custom-Header-Value"
     return {"hello": "world"}
-
 
 # cookies
 # Cookies can also be particularly useful when you want to maintain the user's state within
@@ -294,7 +287,7 @@ from fastapi.responses import  RedirectResponse
 async def redirect():
     return RedirectResponse("https://www.youtube.com/watch?v=IgCfZkR8wME&t=1342s")
 
-@app.get("/redirect1")
+@app.get("/redirect")
 async def redirect():
     return RedirectResponse("/new-url", status_code=status.HTTP_301_MOVED_PERMANENTLY)
 
@@ -324,5 +317,14 @@ async def get_xml():
 # You can view the complete list of arguments in the Starlette documentation at https://
 # www.starlette.io/responses/#response.
 
-# -----Structuring a bigger project with multiple routers-------------------
+# -----------------------------------------------------------------
+# -----Structuring a bigger project with multiple routers----------
+# -----------------------------------------------------------------
+
+# 1. models (dir where are the models)
+# 2. routers (dir where are the routers)
+# 3. app - db (files the first is the main application and the later is database )
+# The __init__.py files are there to properly define our directories as Python packages
+# if we see this file in a directory then this is working like a Python packages
+
 

@@ -1,0 +1,26 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('style', path = 'example.css')}}">
+    <title>Form User</title>
+</head>
+<body>
+    <div class="wrap">
+        <form action="/users" method="post" enctype="multipart/form-data" autocomplete="off">
+            <div class="content">
+                <legend id="leg" align="right"> <label for="leg" class="legend_user"> User Content </label> </legend>
+                <label > Username: <input type="text" name="username" size="15" maxlength="30" required="required"></label>
+                <label > Password: <input type="password" name="password" size="15" maxlength="30" required="required"></label>
+                
+            </div>   
+            <div >
+                <br>
+                <input type="submit" value="Listo" class="buttom">
+            </div>
+        </form>
+
+    </div>
+</body>
+</html>
