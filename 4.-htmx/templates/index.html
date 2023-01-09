@@ -1,0 +1,18 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTMLX</title>
+  </head>
+  <body>
+
+    <button hx-get="/items" hx-trigger="click" hx-target="#parent-div" hx-swap="afterend" name = 'button' id = '1321'>
+        Click Me!
+    </button>
+    <div id="parent-div">
+        <h1>The new Here</h1>
+    </div>
+    <script src="https://unpkg.com/htmx.org@1.8.0"></script>
+  </body>
+</html>

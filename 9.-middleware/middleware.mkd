@@ -1,0 +1,9 @@
+## CORS (Cross-Origin Resource Sharing)
+
+CORS or "Cross-Origin Resource Sharing" refers to the situations when a frontend running in a browser has JavaScript code that communicates with a backend, and the backend is in a different "origin" than the frontend.
+
+*Cross-Origin Resource Sharing* (CORS) is an HTTP-header based mechanism that allows a server to indicate any origins (domain, scheme, or port) other than its own from which a browser should permit loading resources
+
+An example of a cross-origin request: the front-end JavaScript code served from `https://domain-a.com` uses XMLHttpRequest to make a request for `https://domain-b.com/data.json`.
+
+For security reasons, browsers restrict cross-origin HTTP requests initiated from scripts. For example, the `Fetch API` follow the *same-origin policy*. This means that a web application using those `APIs` can only request resources from the same origin the application was loaded from unless the response from other origins includes the right CORS headers.

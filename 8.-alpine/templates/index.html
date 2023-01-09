@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      defer
+      src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <script src="https://unpkg.com/htmx.org@1.6.1"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Status Response</title>
+  </head>
+  <body class="w-full h-[100vh]">
+    <main class="w-full h-full flex flex-col justify-center items-center">
+      <section class="basis-16 mb-5 border border-black rounded-xl px-2">
+        <div x-data="{count:0}">
+          <h1 class="text-center font-bold">Counter</h1>
+          <button
+            @click="count++"
+            class="border border-gray-200 rounded-xl px-3 hover:bg-gray-200 active:bg-gray-500 active:text-white"
+          >
+            Increment
+          </button>
+          <span
+            x-text="count"
+            class="ml-2 border border-gray-200 rounded-xl px-2"
+          ></span>
+        </div>
+      </section>
+      <section class="basis-48 mb-5 border border-black rounded-xl px-2">
+        <div x-data="{ open1: false, open2:false  }" class="relative w-[200px]">
+          <h1 class="text-center font-bold mb-2">Toggle</h1>
+          <button
+            @mouseenter="open1 = ! open1, open2 = open2? false: false "
+            class="bg-gray-200 p-2 w-[90px]"
+          >
+            Toggle Content
+          </button>
+          <div x-show="open1" class="absolute" x-transition>Content1</div>
+          <button
+            @mouseenter="open2 = ! open2, open1 = open1? false: false"
+            class="bg-gray-200 p-2 w-[90px]"
+          >
+            Toggle Content
+          </button>
+          <div x-show="open2" class="absolute right-0" x-transition>Content2</div>
+        </div>
+      </section>
+      <section>
+        <div x-data="{
+            search:'',
+            items:['xiaomi 10', 'xiaomi note', 'xiaomi 9', 'sansumg note', 'sony xperia 1'],
+            get filteredItems(){
+                return this.items.filter( i => i.startsWith(this.search) )
+            }
+        }
+        ">
+        <input type="text" x-model="search" placeholder="Search...">
+        <ul class="absolute" >
+            <template x-for="item in filteredItems":key="item">
+                <li x-text="item"></li>
+
+            </template>
+        </ul>
+
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

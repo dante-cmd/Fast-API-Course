@@ -1,64 +1,27 @@
-# This is a sample Python script.
+from typing import AsyncGenerator
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from pydantic import BaseModel
 
-# Press Mayús+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+app = FastAPI()
 
-import asyncio
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
+templates = Jinja2Templates(directory="templates")
 
-async def main():
-    print('Hello ...')
-    await asyncio.sleep(1)
-    print('... World!')
-
-asyncio.run(main=main())
-
-
-async def printer(name: str, times: int) -> None:
-    for i in range(times):
-        print(name)
-        await asyncio.sleep(1)
-
-    async def main():
-        await asyncio.gather(printer("A", 3), printer("B", 3))
-
-    asyncio.run(main())
-
-def goo():
-    for _ in range(3):
-        print(sum((x for x in range(20_000_000))))
-        time.sleep(1)
-        print('Two')
-
-async def count():
-    print(sum((x for x in range(20_000_000))))
-    await asyncio.sleep(0.5)
-    print("Two")
-
-async def main():
-    await asyncio.gather(count(), count(), count())
-
-if __name__ == "__main__":
-    import time
-    s = time.perf_counter()
-    asyncio.run(main())
-    #goo()
-    elapsed = time.perf_counter() - s
-    print(f"{__file__} executed in {elapsed:0.2f} seconds.")
+@app.get("/", response_class=HTMLResponse)
+async def read_item(request: Request):
+    context = {"request": request}
+    return templates.TemplateResponse("item.html", context=context)
 
 
+class User(BaseModel):
+    name:str = "Soul"
+    age:int = 50
 
-def add_sum(x:int = 10) -> str:
-    y = x + 8
-    return y
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+@app.post("/")
+async def post_data(user:User):
+    print(user.dict())
+    return {"sas":"sasas"}

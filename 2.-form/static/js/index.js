@@ -42,49 +42,49 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
+// /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(1);
+// 	__webpack_require__(1);
 
 
-/***/ },
+// /***/ },
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+// /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+// 	'use strict';
 
-	var _creditCardType = __webpack_require__(2);
+// 	var _creditCardType = __webpack_require__(2);
 
-	var _creditCardType2 = _interopRequireDefault(_creditCardType);
+// 	var _creditCardType2 = _interopRequireDefault(_creditCardType);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+// 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	$(document).on('input change', '#input--cc input', function () {
-	  var ccNum = $(this).val();
-	  var ccType = (0, _creditCardType2.default)(ccNum);
+// 	$(document).on('input change', '#input--cc input', function () {
+// 	  var ccNum = $(this).val();
+// 	  var ccType = (0, _creditCardType2.default)(ccNum);
 
-	  if (!ccNum.length || typeof ccType === "undefined" || !ccType.length) {
-	    $('#input--cc').removeClass().addClass('creditcard-icon');
-	    return;
-	  }
+// 	  if (!ccNum.length || typeof ccType === "undefined" || !ccType.length) {
+// 	    $('#input--cc').removeClass().addClass('creditcard-icon');
+// 	    return;
+// 	  }
 
-	  var creditcardType = ccType[0].type;
+// 	  var creditcardType = ccType[0].type;
 
-	  var ccTypes = {
-	    'american-express': 'AE',
-	    'master-card': 'MC',
-	    'visa': 'VI',
-	    'discover': 'DI'
-	  };
+// 	  var ccTypes = {
+// 	    'american-express': 'AE',
+// 	    'master-card': 'MC',
+// 	    'visa': 'VI',
+// 	    'discover': 'DI'
+// 	  };
 
-	  $('#input--cc').removeClass().addClass('creditcard-icon').addClass('creditcard-icon--' + creditcardType); //set creditcard icon
+// 	  $('#input--cc').removeClass().addClass('creditcard-icon').addClass('creditcard-icon--' + creditcardType); //set creditcard icon
 
-	  // select creditcard type
-	  $(".creditcard-type > select").val(ccTypes[creditcardType]);
-	  // set the creditcard type <select> to the value entered
-	});
+// 	  // select creditcard type
+// 	  $(".creditcard-type > select").val(ccTypes[creditcardType]);
+// 	  // set the creditcard type <select> to the value entered
+// 	});
 
-/***/ },
+// /***/ },
 /* 2 */
 /***/ function(module, exports) {
 

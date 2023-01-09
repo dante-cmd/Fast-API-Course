@@ -14,7 +14,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css"
     />
 
-    <link rel="stylesheet" href="{{url_for('static', path = 'css/style.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static',   = 'css/style.css')}}" />
   </head>
 
   <body>
@@ -54,12 +54,12 @@
             <ul class="form-list">
               <li class="form-list__row">
                 <label>Name</label>
-                <input type="text" name="name_user" required="" />
+                <input type="text" name="name-user" required="" />
               </li>
               <li class="form-list__row">
                 <label>Card Number</label>
-                <div id="input--cc" class="creditcard-icon">
-                  <input type="text" name="cc_number" required="" />
+                <div id="input--cc" class="">
+                  <input type="text" name="cc-number" id = "cc_number" required="" />
                 </div>
               </li>
               <li class="form-list__row form-list__row--inline">
@@ -68,7 +68,7 @@
                   <div class="form-list__input-inline">
                     <input
                       type="text"
-                      name="cc_month"
+                      name="cc-month"
                       placeholder="MM"
                       
                       minlength="2"
@@ -78,7 +78,7 @@
                     <!-- pattern="\\d*" -->
                     <input
                       type="text"
-                      name="cc_year"
+                      name="cc-year"
                       placeholder="YY"
                       
                       minlength="2"
@@ -144,14 +144,15 @@
       </div>
       <!-- END: .modal__container -->
     </div>
-    <div class="render">
+    <!-- <div class="render">
       {% for i in rangex %}
         <span id = {{i}}> {{ i }}</span>
       {% endfor %}
-    </div>
+    </div> -->
     <!-- END: .modal -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script> -->
 
     <!-- <script src="js/index.js"></script> -->
+    <script src="{{url_for('static', path = 'js/pattern.js')}}"></script>
   </body>
 </html>

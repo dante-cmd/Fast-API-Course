@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/htmx.org@1.6.1"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Status Response</title>
+</head>
+<body>
+    <nav class="bg-gray-100 h-[70px] w-full">
+        <ul class="flex justify-around items-center h-full w-full
+        ">
+        {% for nv in navs %}
+        <li class="border border-gray-300 rounded-xl px-3 hover:bg-gray-300" ><a href="/">{{nv|title}}</a></li>
+        {% endfor %}
+        </ul>
+    </nav>
+</body>
+</html>
